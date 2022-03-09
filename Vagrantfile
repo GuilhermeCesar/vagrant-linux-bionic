@@ -6,7 +6,7 @@ SCRIPT
 
 
 Vagrant.configure("2") do |config|
-   config.vm.box = "ubuntu/bionic64"
+   config.vm.box = "ubuntu/impish64"
 
    config.vm.define "mysqldb" do |mysql|    
     mysql.vm.network "public_network", bridge: "wlp2s0", ip:"192.168.15.5"
@@ -35,4 +35,16 @@ Vagrant.configure("2") do |config|
     end
   end
 
+
+  config.vm.define "mysqlserver" do |mysqlserver|
+    mysqlserver.vm.network "public_network", bridge: "wlp2s0", ip:"192.168.15.4"
+  end
+
+
+  config.vm.define "ansible" do |ansible|
+    ansible.vm.network "public_network", bridge: "wlp2s0", ip:"192.168.15.7"
+    ansible.vm.provision "shell", inline: "apt-get update && \
+    apt-get install -y software-properties-common && add-apt-repository --yes --update ppa:ansible/ansible && \
+    apt-get install -y ansible"
+  end
 end
